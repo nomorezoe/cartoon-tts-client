@@ -39,7 +39,7 @@ window.__require = function e(t, n, r) {
         var isLocalHost = false;
         -1 == window.location.href.indexOf("localhost") && -1 == window.location.href.indexOf("127.0.0.1") || (isLocalHost = true);
         console.log("isLocalHost", isLocalHost);
-        this.socket = new window.io(isLocalHost ? "http://127.0.0.1:3000" : "http://174.129.37.33:3000", {
+        this.socket = new window.io(isLocalHost ? "http://127.0.0.1:3000" : "http://172.31.28.246:3000", {
           transports: [ "websocket", "polling", "flashsocket" ]
         });
         this.socket.on("connect", this.handleConnect.bind(this));
