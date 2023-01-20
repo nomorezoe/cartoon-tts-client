@@ -51,7 +51,7 @@ window.__require = function e(t, n, r) {
       onTTSCompleted: function onTTSCompleted(info) {
         if (!info) return;
         console.log("onTTSCompleted", info.file, info.info);
-        var remoteUrl = "http://127.0.0.1:3000/output/?fileName=" + info.file;
+        var remoteUrl = "http://13.115.222.147:3000/output/?fileName=" + info.file;
         cc.loader.load({
           url: remoteUrl,
           type: "wav"
