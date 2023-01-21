@@ -39,7 +39,8 @@ window.__require = function e(t, n, r) {
         var isLocalHost = false;
         -1 == window.location.href.indexOf("localhost") && -1 == window.location.href.indexOf("127.0.0.1") || (isLocalHost = true);
         console.log("isLocalHost", isLocalHost);
-        this.socket = new window.io(isLocalHost ? "http://127.0.0.1:3000" : "http://13.115.222.147:3000", {
+        this.urlAddress = isLocalHost ? "http://127.0.0.1:3000" : "http://13.115.222.147:3000";
+        this.socket = new window.io(this.urlAddress, {
           transports: [ "websocket", "polling", "flashsocket" ]
         });
         this.socket.on("connect", this.handleConnect.bind(this));
@@ -51,7 +52,7 @@ window.__require = function e(t, n, r) {
       onTTSCompleted: function onTTSCompleted(info) {
         if (!info) return;
         console.log("onTTSCompleted", info.file, info.info);
-        var remoteUrl = "http://13.115.222.147:3000/output/?fileName=" + info.file;
+        var remoteUrl = this.urlAddress + "/output/?fileName=" + info.file;
         cc.loader.load({
           url: remoteUrl,
           type: "wav"

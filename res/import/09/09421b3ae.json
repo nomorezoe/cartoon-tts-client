@@ -197,8 +197,8 @@
         "__type__": "TypedArray",
         "ctor": "Float64Array",
         "array": [
-          -119.365,
-          -208.254,
+          0,
+          129.524,
           0,
           0,
           0,
@@ -511,8 +511,8 @@
         "__type__": "TypedArray",
         "ctor": "Float64Array",
         "array": [
-          111.746,
-          -208.254,
+          0,
+          79.524,
           0,
           0,
           0,
@@ -605,8 +605,8 @@
             }
           ],
           "_useOriginalSize": false,
-          "_string": "button",
-          "_N$string": "button",
+          "_string": "Speak",
+          "_N$string": "Speak",
           "_fontSize": 20,
           "_enableWrapText": false,
           "_N$horizontalAlign": 1,

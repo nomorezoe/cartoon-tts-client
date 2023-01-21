@@ -125,7 +125,7 @@ window._CCSettings = {
         ]
     },
     md5AssetsMap: {},
-    orientation: "landscape",
+    orientation: "",
     debug: true,
     subpackages: {}
 };
