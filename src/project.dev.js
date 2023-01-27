@@ -33,7 +33,10 @@ window.__require = function e(t, n, r) {
     cc.Class({
       extends: cc.Component,
       properties: {
-        editBox: cc.EditBox
+        editBox: cc.EditBox,
+        audioID: -1,
+        mouthNode: cc.Node,
+        mouthIsReset: true
       },
       onLoad: function onLoad() {
         var isLocalHost = false;
@@ -52,20 +55,76 @@ window.__require = function e(t, n, r) {
       onTTSCompleted: function onTTSCompleted(info) {
         if (!info) return;
         console.log("onTTSCompleted", info.file, info.info);
+        this.audioInfo = info.info;
         var remoteUrl = this.urlAddress + "/output/?fileName=" + info.file;
         cc.loader.load({
           url: remoteUrl,
           type: "wav"
         }, function(err, res) {
-          cc.audioEngine.play(res);
-        });
+          this.audioID = cc.audioEngine.play(res);
+          this.audioOffset = 0;
+          this.updateMouth();
+          cc.audioEngine.setFinishCallback(this.audioID, function() {
+            this.audioID = -1;
+            this.mouthIsReset = false;
+          }.bind(this));
+        }.bind(this));
       },
       sendHandler: function sendHandler() {
         var sendText = this.editBox.string;
+        if ("" == sendText) return;
         this.socket.emit("tts", sendText);
+      },
+      updateMouth: function updateMouth() {
+        var id = this.audioInfo[this.audioOffset].id;
+        var node = this.mouthNode.getChildByName("mouth_" + id);
+        if (node) {
+          for (var i = 0; i <= 21; i++) {
+            var node2 = this.mouthNode.getChildByName("mouth_" + i);
+            node2.active = false;
+          }
+          node.active = true;
+        }
+      },
+      update: function update(dt) {
+        if (-1 != this.audioID) {
+          var time = cc.audioEngine.getCurrentTime(this.audioID);
+          while (this.audioInfo.length > this.audioOffset && this.audioInfo[this.audioOffset].audioOffset < 1e3 * time + 15) {
+            this.updateMouth();
+            this.audioOffset += 1;
+          }
+        } else if (!this.mouthIsReset) {
+          this.mouthIsReset = true;
+          this.mouthNode.getChildByName("mouth_0").active = true;
+          for (var i = 1; i <= 21; i++) {
+            var node2 = this.mouthNode.getChildByName("mouth_" + i);
+            node2.active = false;
+          }
+        }
+      }
+    });
+    cc._RF.pop();
+  }, {} ],
+  Loading: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "61f1fNOFbZKPoN7duuM93VT", "Loading");
+    "use strict";
+    cc.Class({
+      extends: cc.Component,
+      properties: {
+        progressBar: cc.ProgressBar
+      },
+      onLoad: function onLoad() {
+        cc.director.preloadScene("game", this.onProgress.bind(this), this.onComplete.bind(this));
+      },
+      onProgress: function onProgress(completedCount, totalCount) {
+        this.progressBar.progress = completedCount / totalCount;
+      },
+      onComplete: function onComplete(error) {
+        error || cc.director.loadScene("game");
       }
     });
     cc._RF.pop();
   }, {} ]
-}, {}, [ "Game" ]);
+}, {}, [ "Game", "Loading" ]);
 //# sourceMappingURL=project.dev.js.map
