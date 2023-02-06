@@ -15805,15 +15805,26 @@
       "_children": [
         {
           "__id__": 12
-        },
+        }
+      ],
+      "_components": [
         {
-          "__id__": 13
+          "__type__": "40ee8VmmVRIVoMRa4vSDXGF",
+          "node": {
+            "__id__": 11
+          },
+          "stage": {
+            "__id__": 2
+          },
+          "eye": {
+            "__id__": 12
+          }
         }
       ],
       "_contentSize": {
         "__type__": "cc.Size",
-        "width": 164,
-        "height": 164
+        "width": 48,
+        "height": 35
       },
       "_trs": {
         "__type__": "TypedArray",
@@ -15826,18 +15837,23 @@
           0,
           0,
           1,
-          0.2,
-          0.2,
-          0.2
+          1,
+          1,
+          1
         ]
       }
     },
     {
       "__type__": "cc.Node",
-      "_name": "New Sprite",
+      "_name": "eye",
       "_parent": {
         "__id__": 11
       },
+      "_children": [
+        {
+          "__id__": 13
+        }
+      ],
       "_components": [
         {
           "__type__": "cc.Sprite",
@@ -15870,8 +15886,8 @@
           0,
           0,
           1,
-          1,
-          1,
+          0.2,
+          0.2,
           1
         ]
       }
@@ -15880,7 +15896,7 @@
       "__type__": "cc.Node",
       "_name": "eye_light",
       "_parent": {
-        "__id__": 11
+        "__id__": 12
       },
       "_components": [
         {
@@ -15929,15 +15945,26 @@
       "_children": [
         {
           "__id__": 15
-        },
+        }
+      ],
+      "_components": [
         {
-          "__id__": 16
+          "__type__": "40ee8VmmVRIVoMRa4vSDXGF",
+          "node": {
+            "__id__": 14
+          },
+          "stage": {
+            "__id__": 2
+          },
+          "eye": {
+            "__id__": 15
+          }
         }
       ],
       "_contentSize": {
         "__type__": "cc.Size",
-        "width": 164,
-        "height": 164
+        "width": 48,
+        "height": 35
       },
       "_trs": {
         "__type__": "TypedArray",
@@ -15950,18 +15977,23 @@
           0,
           0,
           1,
-          0.2,
-          0.2,
-          0.2
+          1,
+          1,
+          1
         ]
       }
     },
     {
       "__type__": "cc.Node",
-      "_name": "New Sprite",
+      "_name": "eye",
       "_parent": {
         "__id__": 14
       },
+      "_children": [
+        {
+          "__id__": 16
+        }
+      ],
       "_components": [
         {
           "__type__": "cc.Sprite",
@@ -15994,8 +16026,8 @@
           0,
           0,
           1,
-          1,
-          1,
+          0.2,
+          0.2,
           1
         ]
       }
@@ -16004,7 +16036,7 @@
       "__type__": "cc.Node",
       "_name": "eye_light",
       "_parent": {
-        "__id__": 14
+        "__id__": 15
       },
       "_components": [
         {
@@ -16031,8 +16063,8 @@
         "__type__": "TypedArray",
         "ctor": "Float64Array",
         "array": [
-          7.105427357601002e-14,
-          7.105427357601002e-14,
+          0,
+          0,
           0,
           0,
           0,
