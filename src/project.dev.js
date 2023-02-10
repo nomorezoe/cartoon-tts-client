@@ -26,6 +26,63 @@ window.__require = function e(t, n, r) {
   for (var o = 0; o < r.length; o++) s(r[o]);
   return s;
 }({
+  CamMove: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "2cd67RFoK5K1bWUfo3GU/9x", "CamMove");
+    "use strict";
+    var CamAdjust = cc.Class({
+      extends: cc.Component,
+      properties: {
+        cameras: [ cc.Camera ],
+        sceneNodes: [ cc.Node ],
+        infos: null,
+        vx: 0,
+        vy: 0,
+        ax: .1,
+        maxV: .3,
+        rotRangeX: 1,
+        rotRangeY: 10,
+        screenWidth: 0,
+        designResolutionHeight: 0,
+        designResolutionHeight_2: 0
+      },
+      onLoad: function onLoad() {
+        this.screenWidth = cc.view.getDesignResolutionSize().height / cc.view.getCanvasSize().height * cc.view.getCanvasSize().width;
+        this.designResolutionHeight = cc.view.getDesignResolutionSize().height;
+        this.designResolutionHeight_2 = cc.view.getDesignResolutionSize().height / 2;
+        this.infos = [];
+        for (var i = 0; i < this.sceneNodes.length; i++) {
+          var info = {
+            x: this.sceneNodes[i].eulerAngles.x,
+            y: this.sceneNodes[i].eulerAngles.y
+          };
+          this.infos.push(info);
+        }
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        this.node.on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this);
+      },
+      onDestroy: function onDestroy() {
+        this.node.off(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        this.node.on(cc.Node.EventType.MOUSE_MOVE, this.onMouseMove, this);
+      },
+      onTouchMove: function onTouchMove(evt) {},
+      onMouseMove: function onMouseMove(evt) {
+        var targetY = (this.screenWidth / 2 - evt._x) / (this.screenWidth / 2) * this.rotRangeY;
+        var targetX = -Math.pow(1 - evt._y / this.designResolutionHeight, 3) * this.rotRangeX * 2;
+        var currentX = this.sceneNodes[0].eulerAngles.x;
+        var currentY = this.sceneNodes[0].eulerAngles.y;
+        var timeY = Math.abs(targetY - currentY) / this.rotRangeY;
+        var timeX = Math.abs(targetX - currentX) / this.rotRangeX;
+        console.log("time", timeX, timeY);
+        for (var i = 0; i < this.sceneNodes.length; i++) {
+          var rotate3DTo = cc.rotate3DTo(Math.max(timeX, timeY), cc.v3(targetX + this.infos[i].x, targetY + this.infos[i].y, 0));
+          this.sceneNodes[i].stopAllActions();
+          this.sceneNodes[i].runAction(rotate3DTo.easing(cc.easeOut(1)));
+        }
+      }
+    });
+    cc._RF.pop();
+  }, {} ],
   Eye: [ function(require, module, exports) {
     "use strict";
     cc._RF.push(module, "40ee8VmmVRIVoMRa4vSDXGF", "Eye");
@@ -166,6 +223,46 @@ window.__require = function e(t, n, r) {
       }
     });
     cc._RF.pop();
+  }, {} ],
+  MusicToggle: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "9bcd51KbVdE37cQ27yYx/FP", "MusicToggle");
+    "use strict";
+    cc.Class({
+      extends: cc.Component,
+      properties: {
+        onNode: cc.Node,
+        offNode: cc.Node,
+        hintNode: cc.Node,
+        hintText: cc.Label,
+        audioId: null,
+        music: cc.AudioClip
+      },
+      onLoad: function onLoad() {
+        this.isMusicOn = cc.sys.localStorage.getItem("music");
+        null == this.isMusicOn && (this.isMusicOn = true);
+        this.isMusicOn ? this.toggleOn(true) : this.toggleOff();
+      },
+      toggleOver: function toggleOver() {
+        this.hintNode.active = true;
+      },
+      toggleOut: function toggleOut() {
+        this.hintNode.active = false;
+      },
+      toggleOff: function toggleOff() {
+        this.onNode.active = true;
+        this.offNode.active = false;
+        this.hintText.string = "Turn Volumn On";
+        null != this.audioId && cc.audioEngine.pauseMusic();
+      },
+      toggleOn: function toggleOn() {
+        this.offNode.active = true;
+        this.onNode.active = false;
+        this.hintText.string = "Turn Volumn Off";
+        this.audioId ? cc.audioEngine.resumeMusic() : this.audioId = cc.audioEngine.playMusic(this.music, true);
+      }
+    });
+    cc._RF.pop();
   }, {} ]
-}, {}, [ "Eye", "Game", "Loading" ]);
+}, {}, [ "CamMove", "Eye", "Game", "MusicToggle", "Loading" ]);
 //# sourceMappingURL=project.dev.js.map
