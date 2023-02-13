@@ -91,7 +91,8 @@ window.__require = function e(t, n, r) {
       extends: cc.Component,
       properties: {
         stage: cc.Node,
-        eye: cc.Node
+        eye: cc.Node,
+        isLeft: cc.Boolean
       },
       onLoad: function onLoad() {
         this.randX = 8;
@@ -108,16 +109,26 @@ window.__require = function e(t, n, r) {
         var len = 0;
         var tan = 0;
         var ctan = 0;
+        var posX = 0;
+        var posY = 0;
         if (0 != pos.x && 0 != pos.y) {
-          pos.x < 0 ? pos.x = Math.max(pos.x, -8) : pos.x = Math.min(pos.x, 8);
-          pos.y < 0 ? pos.y = Math.max(pos.y, -1.5) : pos.y = Math.min(pos.y, 1.5);
-          var len2 = Math.pow(pos.x, 2) * Math.pow(pos.y, 2) / (Math.pow(pos.x, 2) + Math.pow(pos.y, 2));
-          len = Math.pow(len2, .5);
-          tan = pos.y / len;
-          ctan = pos.x / len;
+          var mouseLen2 = Math.pow(pos.x, 2) * Math.pow(pos.y, 2) / (Math.pow(pos.x, 2) + Math.pow(pos.y, 2));
+          if (mouseLen2 > Math.pow(150, 2)) {
+            posX = 0;
+            posY = 0;
+          } else {
+            var factor = Math.min(Math.pow(mouseLen2, .5) / 40, 1);
+            this.isLeft ? pos.x -= 40 * factor : pos.x += 40 * factor;
+            pos.x < 0 ? pos.x = Math.max(pos.x, -8) : pos.x = Math.min(pos.x, 8);
+            pos.y < 0 ? pos.y = Math.max(pos.y, -2.5) : pos.y = Math.min(pos.y, 2.5);
+            var len2 = Math.pow(pos.x, 2) * Math.pow(pos.y, 2) / (Math.pow(pos.x, 2) + Math.pow(pos.y, 2));
+            len = Math.pow(len2, .5);
+            tan = pos.y / len;
+            ctan = pos.x / len;
+            posX = len * ctan;
+            posY = len * tan;
+          }
         }
-        var posX = len * ctan;
-        var posY = len * tan;
         this.eye.setPosition(posX, posY);
         console.log("set pos", posX, posY);
       }
@@ -236,12 +247,13 @@ window.__require = function e(t, n, r) {
         hintNode: cc.Node,
         hintText: cc.Label,
         audioId: null,
-        music: cc.AudioClip
+        music: cc.AudioClip,
+        anim: cc.Animation
       },
       onLoad: function onLoad() {
         this.isMusicOn = cc.sys.localStorage.getItem("music");
         null == this.isMusicOn && (this.isMusicOn = true);
-        this.isMusicOn ? this.toggleOn(true) : this.toggleOff();
+        this.isMusicOn ? this.toggleOn() : this.toggleOff();
       },
       toggleOver: function toggleOver() {
         this.hintNode.active = true;
