@@ -73,7 +73,6 @@ window.__require = function e(t, n, r) {
         var currentY = this.sceneNodes[0].eulerAngles.y;
         var timeY = Math.abs(targetY - currentY) / this.rotRangeY;
         var timeX = Math.abs(targetX - currentX) / this.rotRangeX;
-        console.log("time", timeX, timeY);
         for (var i = 0; i < this.sceneNodes.length; i++) {
           var rotate3DTo = cc.rotate3DTo(Math.max(timeX, timeY), cc.v3(targetX + this.infos[i].x, targetY + this.infos[i].y, 0));
           this.sceneNodes[i].stopAllActions();
@@ -91,16 +90,14 @@ window.__require = function e(t, n, r) {
       extends: cc.Component,
       properties: {
         stage: cc.Node,
-        eye: cc.Node
+        eye: cc.Node,
+        isLeft: cc.Boolean
       },
       onLoad: function onLoad() {
         this.randX = 8;
         this.randY = 1.5;
-        this.stage.on(cc.Node.EventType.MOUSE_MOVE, this.mouseMoveHandler, this);
       },
-      touchMoveHandler: function touchMoveHandler(evt) {
-        console.log(evt);
-      },
+      touchMoveHandler: function touchMoveHandler(evt) {},
       mouseMoveHandler: function mouseMoveHandler(evt) {
         var worldPos = this.stage.convertToWorldSpaceAR(cc.v2(evt.getLocationX(), evt.getLocationY()));
         worldPos = cc.v2(evt.getLocationX(), evt.getLocationY());
@@ -108,18 +105,27 @@ window.__require = function e(t, n, r) {
         var len = 0;
         var tan = 0;
         var ctan = 0;
+        var posX = 0;
+        var posY = 0;
         if (0 != pos.x && 0 != pos.y) {
-          pos.x < 0 ? pos.x = Math.max(pos.x, -8) : pos.x = Math.min(pos.x, 8);
-          pos.y < 0 ? pos.y = Math.max(pos.y, -1.5) : pos.y = Math.min(pos.y, 1.5);
-          var len2 = Math.pow(pos.x, 2) * Math.pow(pos.y, 2) / (Math.pow(pos.x, 2) + Math.pow(pos.y, 2));
-          len = Math.pow(len2, .5);
-          tan = pos.y / len;
-          ctan = pos.x / len;
+          var mouseLen2 = Math.pow(pos.x, 2) * Math.pow(pos.y, 2) / (Math.pow(pos.x, 2) + Math.pow(pos.y, 2));
+          if (mouseLen2 > Math.pow(150, 2)) {
+            posX = 0;
+            posY = 0;
+          } else {
+            var factor = Math.min(Math.pow(mouseLen2, .5) / 40, 1);
+            this.isLeft ? pos.x -= 40 * factor : pos.x += 40 * factor;
+            pos.x < 0 ? pos.x = Math.max(pos.x, -8) : pos.x = Math.min(pos.x, 8);
+            pos.y < 0 ? pos.y = Math.max(pos.y, -2.5) : pos.y = Math.min(pos.y, 2.5);
+            var len2 = Math.pow(pos.x, 2) * Math.pow(pos.y, 2) / (Math.pow(pos.x, 2) + Math.pow(pos.y, 2));
+            len = Math.pow(len2, .5);
+            tan = pos.y / len;
+            ctan = pos.x / len;
+            posX = len * ctan;
+            posY = len * tan;
+          }
         }
-        var posX = len * ctan;
-        var posY = len * tan;
         this.eye.setPosition(posX, posY);
-        console.log("set pos", posX, posY);
       }
     });
     cc._RF.pop();
@@ -134,27 +140,23 @@ window.__require = function e(t, n, r) {
         editBox: cc.EditBox,
         audioID: -1,
         mouthNode: cc.Node,
-        mouthIsReset: true
+        mouthIsReset: true,
+        historyObjects: [],
+        sendButton: cc.Node
       },
       onLoad: function onLoad() {
         var isLocalHost = false;
         -1 == window.location.href.indexOf("localhost") && -1 == window.location.href.indexOf("127.0.0.1") || (isLocalHost = true);
         console.log("isLocalHost", isLocalHost);
-        this.urlAddress = isLocalHost ? "http://127.0.0.1:3000" : "http://13.115.222.147:3000";
-        this.socket = new window.io(this.urlAddress, {
-          transports: [ "websocket", "polling", "flashsocket" ]
-        });
-        this.socket.on("connect", this.handleConnect.bind(this));
-        this.socket.on("onTTSCompleted", this.onTTSCompleted.bind(this));
+        this.onTextLenChange(this.editBox.string);
       },
       handleConnect: function handleConnect() {
         console.log("connected", this.socket.id);
       },
       onTTSCompleted: function onTTSCompleted(info) {
         if (!info) return;
-        console.log("onTTSCompleted", info.file, info.info);
-        this.audioInfo = info.info;
-        var remoteUrl = this.urlAddress + "/output/?fileName=" + info.file;
+        this.audioInfo = info.lip_sync_animation;
+        var remoteUrl = info.audio_file_link;
         cc.loader.load({
           url: remoteUrl,
           type: "wav"
@@ -170,11 +172,31 @@ window.__require = function e(t, n, r) {
       },
       sendHandler: function sendHandler() {
         var sendText = this.editBox.string;
-        if ("" == sendText) return;
-        this.socket.emit("tts", sendText);
+        if (0 == sendText.trim().length) return;
+        var that = this;
+        var xhr = new XMLHttpRequest();
+        var requestURL = "http://40.121.137.102/messages/";
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == XMLHttpRequest.DONE && 200 == xhr.status) {
+            var json = JSON.parse(xhr.responseText);
+            that.onTTSCompleted(json);
+            that.historyObjects.push({
+              index: that.historyObjects.length,
+              reply: json.reply,
+              message: json.message
+            });
+          }
+        };
+        var params = JSON.stringify({
+          message: sendText,
+          hitory: this.historyObjects
+        });
+        xhr.open("POST", requestURL, true);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(params);
       },
       updateMouth: function updateMouth() {
-        var id = this.audioInfo[this.audioOffset].id;
+        var id = this.audioInfo[this.audioOffset].viseme_id;
         var node = this.mouthNode.getChildByName("mouth_" + id);
         if (node) {
           for (var i = 0; i <= 21; i++) {
@@ -187,7 +209,7 @@ window.__require = function e(t, n, r) {
       update: function update(dt) {
         if (-1 != this.audioID) {
           var time = cc.audioEngine.getCurrentTime(this.audioID);
-          while (this.audioInfo.length > this.audioOffset && this.audioInfo[this.audioOffset].audioOffset < 1e3 * time + 15) {
+          while (this.audioInfo.length > this.audioOffset && this.audioInfo[this.audioOffset].audio_offset_ms < 1e3 * time + 15) {
             this.updateMouth();
             this.audioOffset += 1;
           }
@@ -199,6 +221,9 @@ window.__require = function e(t, n, r) {
             node2.active = false;
           }
         }
+      },
+      onTextLenChange: function onTextLenChange(textContent) {
+        this.sendButton.active = 0 != textContent.length;
       }
     });
     cc._RF.pop();
@@ -236,12 +261,16 @@ window.__require = function e(t, n, r) {
         hintNode: cc.Node,
         hintText: cc.Label,
         audioId: null,
-        music: cc.AudioClip
+        music: {
+          type: cc.AudioClip,
+          default: null
+        },
+        anim: cc.Animation
       },
       onLoad: function onLoad() {
         this.isMusicOn = cc.sys.localStorage.getItem("music");
         null == this.isMusicOn && (this.isMusicOn = true);
-        this.isMusicOn ? this.toggleOn(true) : this.toggleOff();
+        this.isMusicOn ? this.toggleOn() : this.toggleOff();
       },
       toggleOver: function toggleOver() {
         this.hintNode.active = true;
