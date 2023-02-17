@@ -87,15 +87,15 @@ window._CCSettings = {
     jsList: [
         "assets/Scripts/libs/socket.io.js"
     ],
-    launchScene: "db://assets/game.fire",
+    launchScene: "db://assets/loading.fire",
     scenes: [
-        {
-            url: "db://assets/game.fire",
-            uuid: "c6/65M7eZKaLRazJZ7VrIg"
-        },
         {
             url: "db://assets/loading.fire",
             uuid: "d19ZeRgSBOo634qfuVg2Yh"
+        },
+        {
+            url: "db://assets/game.fire",
+            uuid: "c6/65M7eZKaLRazJZ7VrIg"
         }
     ],
     packedAssets: {
