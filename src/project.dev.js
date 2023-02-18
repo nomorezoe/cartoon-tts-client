@@ -26,6 +26,48 @@ window.__require = function e(t, n, r) {
   for (var o = 0; o < r.length; o++) s(r[o]);
   return s;
 }({
+  Ballon: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "27dc3v2SfVPAalyVvDSGo57", "Ballon");
+    "use strict";
+    cc.Class({
+      extends: cc.Component,
+      properties: {
+        whiteBG: cc.Node,
+        pinkBG: cc.Node,
+        text: cc.Label
+      },
+      start: function start() {},
+      update: function update() {
+        if (this.updateTextHeight) {
+          this.node.height = this.bg.height = Math.max(55, this.text.node.height + 20);
+          this.updateTextHeight = false;
+        }
+      },
+      init: function init(text, isFurwee) {
+        if (isFurwee) {
+          this.text.node.color = new cc.Color("#63697B");
+          this.pinkBG.active = false;
+          this.whiteBG.active = true;
+          this.bg = this.whiteBG;
+        } else {
+          this.text.node.color = new cc.Color("#FFFFFF");
+          this.whiteBG.active = false;
+          this.pinkBG.active = true;
+          this.bg = this.pinkBG;
+        }
+        this.isFurwee = isFurwee;
+        this.text.string = text;
+        this.updateTextHeight = true;
+      },
+      step: function step() {
+        this.isFurwee ? this.node.x -= 20 : this.node.x += 20;
+        this.node.opacity -= 50;
+        this.node.opacity <= 0 && this.node.parent.removeChild(this.node);
+      }
+    });
+    cc._RF.pop();
+  }, {} ],
   CamMove: [ function(require, module, exports) {
     "use strict";
     cc._RF.push(module, "2cd67RFoK5K1bWUfo3GU/9x", "CamMove");
@@ -134,6 +176,7 @@ window.__require = function e(t, n, r) {
     "use strict";
     cc._RF.push(module, "aa6b4oHh3RETr68323Kl57q", "Game");
     "use strict";
+    var MusicToggle = require("MusicToggle");
     cc.Class({
       extends: cc.Component,
       properties: {
@@ -142,7 +185,15 @@ window.__require = function e(t, n, r) {
         mouthNode: cc.Node,
         mouthIsReset: true,
         historyObjects: [],
-        sendButton: cc.Node
+        sendButton: cc.Node,
+        balloonPrefab: cc.Prefab,
+        balloonNode: cc.Node,
+        introSound: {
+          type: cc.AudioClip,
+          default: null
+        },
+        music: MusicToggle,
+        blockerNode: cc.Node
       },
       onLoad: function onLoad() {
         var isLocalHost = false;
@@ -152,6 +203,11 @@ window.__require = function e(t, n, r) {
       },
       handleConnect: function handleConnect() {
         console.log("connected", this.socket.id);
+      },
+      startFurwee: function startFurwee() {
+        cc.audioEngine.play(this.introSound);
+        var msg = "Hi, my name is Furwee. What's your name?";
+        this.addBallon(msg, true);
       },
       onTTSCompleted: function onTTSCompleted(info) {
         if (!info) return;
@@ -173,6 +229,9 @@ window.__require = function e(t, n, r) {
       sendHandler: function sendHandler() {
         var sendText = this.editBox.string;
         if (0 == sendText.trim().length) return;
+        this.addBallon(sendText, false);
+        this.editBox.string = "";
+        this.onTextLenChange(this.editBox.string);
         var that = this;
         var xhr = new XMLHttpRequest();
         var requestURL = "http://40.121.137.102/messages/";
@@ -185,6 +244,7 @@ window.__require = function e(t, n, r) {
               reply: json.reply,
               message: json.message
             });
+            that.addBallon(json.reply, true);
           }
         };
         var params = JSON.stringify({
@@ -224,10 +284,23 @@ window.__require = function e(t, n, r) {
       },
       onTextLenChange: function onTextLenChange(textContent) {
         this.sendButton.active = 0 != textContent.length;
+      },
+      addBallon: function addBallon(message, isFurwee) {
+        for (var i = 0; i < this.balloonNode.children.length; ++i) this.balloonNode.children[i].getComponent("Ballon").step();
+        var balloon = cc.instantiate(this.balloonPrefab);
+        balloon.getComponent("Ballon").init(message, isFurwee);
+        this.balloonNode.addChild(balloon);
+      },
+      startSound: function startSound() {
+        this.blockerNode.active = false;
+        this.music.initialize();
+        this.startFurwee();
       }
     });
     cc._RF.pop();
-  }, {} ],
+  }, {
+    MusicToggle: "MusicToggle"
+  } ],
   Loading: [ function(require, module, exports) {
     "use strict";
     cc._RF.push(module, "61f1fNOFbZKPoN7duuM93VT", "Loading");
@@ -253,7 +326,7 @@ window.__require = function e(t, n, r) {
     "use strict";
     cc._RF.push(module, "9bcd51KbVdE37cQ27yYx/FP", "MusicToggle");
     "use strict";
-    cc.Class({
+    var MusicToggle = cc.Class({
       extends: cc.Component,
       properties: {
         onNode: cc.Node,
@@ -267,7 +340,7 @@ window.__require = function e(t, n, r) {
         },
         anim: cc.Animation
       },
-      onLoad: function onLoad() {
+      initialize: function initialize() {
         this.isMusicOn = cc.sys.localStorage.getItem("music");
         null == this.isMusicOn && (this.isMusicOn = true);
         this.isMusicOn ? this.toggleOn() : this.toggleOff();
@@ -293,5 +366,5 @@ window.__require = function e(t, n, r) {
     });
     cc._RF.pop();
   }, {} ]
-}, {}, [ "CamMove", "Eye", "Game", "MusicToggle", "Loading" ]);
+}, {}, [ "Ballon", "CamMove", "Eye", "Game", "MusicToggle", "Loading" ]);
 //# sourceMappingURL=project.dev.js.map
