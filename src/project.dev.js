@@ -193,7 +193,11 @@ window.__require = function e(t, n, r) {
           default: null
         },
         music: MusicToggle,
-        blockerNode: cc.Node
+        blockerNode: cc.Node,
+        idleMouthTimeout: -1
+      },
+      start: function start() {
+        this.blockerNode.active = true;
       },
       onLoad: function onLoad() {
         var isLocalHost = false;
@@ -205,11 +209,112 @@ window.__require = function e(t, n, r) {
         console.log("connected", this.socket.id);
       },
       startFurwee: function startFurwee() {
-        cc.audioEngine.play(this.introSound);
         var msg = "Hi, my name is Furwee. What's your name?";
         this.addBallon(msg, true);
+        this.audioInfo = [ {
+          audio_offset_ms: 50,
+          viseme_id: 0
+        }, {
+          audio_offset_ms: 100,
+          viseme_id: 12
+        }, {
+          audio_offset_ms: 237.5,
+          viseme_id: 11
+        }, {
+          audio_offset_ms: 475,
+          viseme_id: 0
+        }, {
+          audio_offset_ms: 650,
+          viseme_id: 21
+        }, {
+          audio_offset_ms: 687.5,
+          viseme_id: 11
+        }, {
+          audio_offset_ms: 762.5,
+          viseme_id: 19
+        }, {
+          audio_offset_ms: 850,
+          viseme_id: 4
+        }, {
+          audio_offset_ms: 893.75,
+          viseme_id: 6
+        }, {
+          audio_offset_ms: 937.5,
+          viseme_id: 21
+        }, {
+          audio_offset_ms: 1e3,
+          viseme_id: 6
+        }, {
+          audio_offset_ms: 1062.5,
+          viseme_id: 15
+        }, {
+          audio_offset_ms: 1150,
+          viseme_id: 18
+        }, {
+          audio_offset_ms: 1212.5,
+          viseme_id: 5
+        }, {
+          audio_offset_ms: 1287.5,
+          viseme_id: 13
+        }, {
+          audio_offset_ms: 1350,
+          viseme_id: 7
+        }, {
+          audio_offset_ms: 1400,
+          viseme_id: 6
+        }, {
+          audio_offset_ms: 1662,
+          viseme_id: 0
+        }, {
+          audio_offset_ms: 2425,
+          viseme_id: 0
+        }, {
+          audio_offset_ms: 2475,
+          viseme_id: 7
+        }, {
+          audio_offset_ms: 2575,
+          viseme_id: 1
+        }, {
+          audio_offset_ms: 2637.5,
+          viseme_id: 19
+        }, {
+          audio_offset_ms: 2687.5,
+          viseme_id: 15
+        }, {
+          audio_offset_ms: 2737.5,
+          viseme_id: 6
+        }, {
+          audio_offset_ms: 2787.5,
+          viseme_id: 3
+        }, {
+          audio_offset_ms: 2825,
+          viseme_id: 13
+        }, {
+          audio_offset_ms: 2862.5,
+          viseme_id: 19
+        }, {
+          audio_offset_ms: 2925,
+          viseme_id: 4
+        }, {
+          audio_offset_ms: 3025,
+          viseme_id: 6
+        }, {
+          audio_offset_ms: 3125,
+          viseme_id: 21
+        }, {
+          audio_offset_ms: 3300,
+          viseme_id: 0
+        } ];
+        this.audioID = cc.audioEngine.play(this.introSound);
+        this.audioOffset = 0;
+        this.updateMouth();
+        cc.audioEngine.setFinishCallback(this.audioID, function() {
+          this.audioID = -1;
+          this.mouthIsReset = false;
+        }.bind(this));
       },
       onTTSCompleted: function onTTSCompleted(info) {
+        console.log(JSON.stringify(info.info));
         if (!info) return;
         this.audioInfo = info.lip_sync_animation;
         var remoteUrl = info.audio_file_link;
@@ -219,6 +324,7 @@ window.__require = function e(t, n, r) {
         }, function(err, res) {
           this.audioID = cc.audioEngine.play(res);
           this.audioOffset = 0;
+          this.stopIdleMouth();
           this.updateMouth();
           cc.audioEngine.setFinishCallback(this.audioID, function() {
             this.audioID = -1;
@@ -259,10 +365,7 @@ window.__require = function e(t, n, r) {
         var id = this.audioInfo[this.audioOffset].viseme_id;
         var node = this.mouthNode.getChildByName("mouth_" + id);
         if (node) {
-          for (var i = 0; i <= 21; i++) {
-            var node2 = this.mouthNode.getChildByName("mouth_" + i);
-            node2.active = false;
-          }
+          this.clearMouth();
           node.active = true;
         }
       },
@@ -275,11 +378,9 @@ window.__require = function e(t, n, r) {
           }
         } else if (!this.mouthIsReset) {
           this.mouthIsReset = true;
+          this.clearMouth();
           this.mouthNode.getChildByName("mouth_0").active = true;
-          for (var i = 1; i <= 21; i++) {
-            var node2 = this.mouthNode.getChildByName("mouth_" + i);
-            node2.active = false;
-          }
+          this.startIdleMouth();
         }
       },
       onTextLenChange: function onTextLenChange(textContent) {
@@ -295,6 +396,31 @@ window.__require = function e(t, n, r) {
         this.blockerNode.active = false;
         this.music.initialize();
         this.startFurwee();
+      },
+      clearMouth: function clearMouth() {
+        for (var i = 0; i <= 21; i++) {
+          var node2 = this.mouthNode.getChildByName("mouth_" + i);
+          node2.active = false;
+        }
+        for (var _i = 0; _i < 2; _i++) {
+          var _node = this.mouthNode.getChildByName("idle_" + _i);
+          _node.active = false;
+        }
+      },
+      startIdleMouth: function startIdleMouth() {
+        this.setIdleMouth();
+      },
+      setIdleMouth: function setIdleMouth() {
+        clearTimeout(this.idleMouthTimeout);
+        this.idleMouthTimeout = -1;
+        this.clearMouth();
+        var idle = Math.floor(2 * Math.random());
+        this.mouthNode.getChildByName("idle_" + idle).active = true;
+        setTimeout(this.setIdleMouth.bind(this), 3e3 * Math.random() + 3e3);
+      },
+      stopIdleMouth: function stopIdleMouth() {
+        clearTimeout(this.idleMouthTimeout);
+        this.idleMouthTimeout = -1;
       }
     });
     cc._RF.pop();
