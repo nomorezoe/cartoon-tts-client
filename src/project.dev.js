@@ -68,6 +68,25 @@ window.__require = function e(t, n, r) {
     });
     cc._RF.pop();
   }, {} ],
+  BodyAnim: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "abd878imktJxIlt0O/9SFux", "BodyAnim");
+    "use strict";
+    var BodyAnim = cc.Class({
+      extends: cc.Component,
+      properties: {
+        anim: cc.Animation
+      },
+      start: function start() {},
+      playIntro: function playIntro() {
+        this.anim.play("intro_body");
+      },
+      introComplete: function introComplete() {
+        this.anim.play("body");
+      }
+    });
+    cc._RF.pop();
+  }, {} ],
   CamMove: [ function(require, module, exports) {
     "use strict";
     cc._RF.push(module, "2cd67RFoK5K1bWUfo3GU/9x", "CamMove");
@@ -177,6 +196,7 @@ window.__require = function e(t, n, r) {
     cc._RF.push(module, "aa6b4oHh3RETr68323Kl57q", "Game");
     "use strict";
     var MusicToggle = require("MusicToggle");
+    var BodyAnim = require("BodyAnim");
     cc.Class({
       extends: cc.Component,
       properties: {
@@ -194,7 +214,9 @@ window.__require = function e(t, n, r) {
         },
         music: MusicToggle,
         blockerNode: cc.Node,
-        idleMouthTimeout: -1
+        idleMouthTimeout: -1,
+        bodyAnim: BodyAnim,
+        headAnim: cc.Animation
       },
       start: function start() {
         this.blockerNode.active = true;
@@ -308,6 +330,8 @@ window.__require = function e(t, n, r) {
         this.audioID = cc.audioEngine.play(this.introSound);
         this.audioOffset = 0;
         this.updateMouth();
+        this.bodyAnim.playIntro();
+        this.headAnim.play();
         cc.audioEngine.setFinishCallback(this.audioID, function() {
           this.audioID = -1;
           this.mouthIsReset = false;
@@ -425,6 +449,7 @@ window.__require = function e(t, n, r) {
     });
     cc._RF.pop();
   }, {
+    BodyAnim: "BodyAnim",
     MusicToggle: "MusicToggle"
   } ],
   Loading: [ function(require, module, exports) {
@@ -492,5 +517,5 @@ window.__require = function e(t, n, r) {
     });
     cc._RF.pop();
   }, {} ]
-}, {}, [ "Ballon", "CamMove", "Eye", "Game", "MusicToggle", "Loading" ]);
+}, {}, [ "Ballon", "BodyAnim", "CamMove", "Eye", "Game", "MusicToggle", "Loading" ]);
 //# sourceMappingURL=project.dev.js.map
