@@ -83,6 +83,9 @@ window.__require = function e(t, n, r) {
       },
       introComplete: function introComplete() {
         this.anim.play("body");
+      },
+      play: function play() {
+        this.anim.play("body");
       }
     });
     cc._RF.pop();
@@ -216,7 +219,8 @@ window.__require = function e(t, n, r) {
         blockerNode: cc.Node,
         idleMouthTimeout: -1,
         bodyAnim: BodyAnim,
-        headAnim: cc.Animation
+        headAnim: cc.Animation,
+        URL: "http://40.121.137.102"
       },
       start: function start() {
         this.blockerNode.active = true;
@@ -230,7 +234,7 @@ window.__require = function e(t, n, r) {
       handleConnect: function handleConnect() {
         console.log("connected", this.socket.id);
       },
-      startFurwee: function startFurwee() {
+      startFurwee_backup: function startFurwee_backup() {
         var msg = "Hi, my name is Furwee. What's your name?";
         this.addBallon(msg, true);
         this.audioInfo = [ {
@@ -337,7 +341,32 @@ window.__require = function e(t, n, r) {
           this.mouthIsReset = false;
         }.bind(this));
       },
+      startFurwee: function startFurwee() {
+        this.headAnim.play();
+        this.bodyAnim.play();
+        var that = this;
+        var xhr = new XMLHttpRequest();
+        var requestURL = this.URL + "/initial-message/";
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == XMLHttpRequest.DONE && 200 == xhr.status) {
+            var json = JSON.parse(xhr.responseText);
+            that.onTTSCompleted(json, function() {
+              that.addBallon(json.reply, true);
+              this.bodyAnim.playIntro();
+            });
+            that.historyObjects.push({
+              index: that.historyObjects.length,
+              reply: json.reply,
+              message: json.message
+            });
+          }
+        };
+        xhr.open("GET", requestURL, true);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+      },
       onTTSCompleted: function onTTSCompleted(info) {
+        var soundloadedHandler = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : null;
         console.log(JSON.stringify(info.info));
         if (!info) return;
         this.audioInfo = info.lip_sync_animation;
@@ -350,6 +379,7 @@ window.__require = function e(t, n, r) {
           this.audioOffset = 0;
           this.stopIdleMouth();
           this.updateMouth();
+          soundloadedHandler && soundloadedHandler();
           cc.audioEngine.setFinishCallback(this.audioID, function() {
             this.audioID = -1;
             this.mouthIsReset = false;
@@ -364,7 +394,7 @@ window.__require = function e(t, n, r) {
         this.onTextLenChange(this.editBox.string);
         var that = this;
         var xhr = new XMLHttpRequest();
-        var requestURL = "http://40.121.137.102/messages/";
+        var requestURL = this.URL + "/messages/";
         xhr.onreadystatechange = function() {
           if (xhr.readyState == XMLHttpRequest.DONE && 200 == xhr.status) {
             var json = JSON.parse(xhr.responseText);

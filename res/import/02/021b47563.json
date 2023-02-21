@@ -414,7 +414,7 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "idle_1",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
         3,
@@ -2229,10 +2229,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_6",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
-        253,
+        198,
         68,
         38
       ],
@@ -2916,10 +2916,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_15",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
-        356,
+        301,
         64,
         39
       ],
@@ -2943,7 +2943,7 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_12",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         73,
         381,
@@ -3135,10 +3135,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_11",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
-        445,
+        390,
         64,
         24
       ],
@@ -3217,10 +3217,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_1",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
-        327,
+        272,
         65,
         23
       ],
@@ -3573,10 +3573,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_4",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
-        401,
+        346,
         64,
         38
       ],
@@ -4451,10 +4451,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_2",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
-        297,
+        242,
         65,
         24
       ],
@@ -7621,7 +7621,7 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_3",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         95,
         3,
@@ -7921,9 +7921,9 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_17",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
-        81,
+        74,
         243,
         63,
         40
@@ -8086,9 +8086,9 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_19",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
-        73,
+        72,
         450,
         62,
         39
@@ -9438,7 +9438,7 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_21",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
         143,
@@ -9549,9 +9549,9 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_18",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
-        74,
+        73,
         312,
         63,
         40
@@ -9934,7 +9934,7 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_20",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         95,
         102,
@@ -9962,10 +9962,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_14",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
-        507,
+        452,
         62,
         39
       ],
@@ -14960,33 +14960,6 @@
   {
     "__type__": "cc.SpriteFrame",
     "content": {
-      "name": "mouth_0",
-      "texture": "195f78cc1",
-      "rect": [
-        3,
-        198,
-        72,
-        49
-      ],
-      "offset": [
-        0.5,
-        0
-      ],
-      "originalSize": [
-        85,
-        49
-      ],
-      "capInsets": [
-        0,
-        0,
-        0,
-        0
-      ]
-    }
-  },
-  {
-    "__type__": "cc.SpriteFrame",
-    "content": {
       "name": "FURWEE 4127",
       "texture": "1cde4c020",
       "rect": [
@@ -15673,10 +15646,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_13",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
-        552,
+        518,
         26,
         25
       ],
@@ -15688,6 +15661,7 @@
         85,
         49
       ],
+      "rotated": 1,
       "capInsets": [
         0,
         0,
@@ -15948,9 +15922,9 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_10",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
-        71,
+        64,
         518,
         24,
         24
@@ -16470,10 +16444,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_16",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
-        35,
-        552,
+        34,
+        497,
         37,
         24
       ],
@@ -16485,6 +16459,7 @@
         85,
         49
       ],
+      "rotated": 1,
       "capInsets": [
         0,
         0,
@@ -18436,54 +18411,6 @@
     },
     {
       "__type__": "cc.Node",
-      "_name": "mouth_0",
-      "_parent": {
-        "__id__": 22
-      },
-      "_components": [
-        {
-          "__type__": "cc.Sprite",
-          "node": {
-            "__id__": 36
-          },
-          "_materials": [
-            {
-              "__uuid__": "ecpdLyjvZBwrvm+cedCcQy"
-            }
-          ],
-          "_spriteFrame": {
-            "__uuid__": "abJd7ClzlFSr0xUIkdhEux"
-          },
-          "_sizeMode": 2,
-          "_isTrimmedMode": false
-        }
-      ],
-      "_contentSize": {
-        "__type__": "cc.Size",
-        "width": 85,
-        "height": 49
-      },
-      "_trs": {
-        "__type__": "TypedArray",
-        "ctor": "Float64Array",
-        "array": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          1,
-          1,
-          1
-        ]
-      },
-      "_groupIndex": 2,
-      "groupIndex": 2
-    },
-    {
-      "__type__": "cc.Node",
       "_name": "mouth_13",
       "_parent": {
         "__id__": 22
@@ -18493,7 +18420,7 @@
         {
           "__type__": "cc.Sprite",
           "node": {
-            "__id__": 37
+            "__id__": 36
           },
           "_materials": [
             {
@@ -18543,7 +18470,7 @@
         {
           "__type__": "cc.Sprite",
           "node": {
-            "__id__": 38
+            "__id__": 37
           },
           "_materials": [
             {
@@ -18592,7 +18519,7 @@
         {
           "__type__": "cc.Sprite",
           "node": {
-            "__id__": 39
+            "__id__": 38
           },
           "_materials": [
             {
@@ -18641,7 +18568,7 @@
         {
           "__type__": "cc.Sprite",
           "node": {
-            "__id__": 40
+            "__id__": 39
           },
           "_materials": [
             {
@@ -18690,7 +18617,7 @@
         {
           "__type__": "cc.Sprite",
           "node": {
-            "__id__": 41
+            "__id__": 40
           },
           "_materials": [
             {
@@ -18739,7 +18666,7 @@
         {
           "__type__": "cc.Sprite",
           "node": {
-            "__id__": 42
+            "__id__": 41
           },
           "_materials": [
             {
@@ -18788,7 +18715,7 @@
         {
           "__type__": "cc.Sprite",
           "node": {
-            "__id__": 43
+            "__id__": 42
           },
           "_materials": [
             {
@@ -18837,7 +18764,7 @@
         {
           "__type__": "cc.Sprite",
           "node": {
-            "__id__": 44
+            "__id__": 43
           },
           "_materials": [
             {
@@ -18886,7 +18813,7 @@
         {
           "__type__": "cc.Sprite",
           "node": {
-            "__id__": 45
+            "__id__": 44
           },
           "_materials": [
             {
@@ -18931,6 +18858,54 @@
         "__id__": 22
       },
       "_active": false,
+      "_components": [
+        {
+          "__type__": "cc.Sprite",
+          "node": {
+            "__id__": 45
+          },
+          "_materials": [
+            {
+              "__uuid__": "ecpdLyjvZBwrvm+cedCcQy"
+            }
+          ],
+          "_spriteFrame": {
+            "__uuid__": "065kEvbiVL1JjWOEzVylUX"
+          },
+          "_sizeMode": 2,
+          "_isTrimmedMode": false
+        }
+      ],
+      "_contentSize": {
+        "__type__": "cc.Size",
+        "width": 86,
+        "height": 64
+      },
+      "_trs": {
+        "__type__": "TypedArray",
+        "ctor": "Float64Array",
+        "array": [
+          0,
+          -6,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "_groupIndex": 2,
+      "groupIndex": 2
+    },
+    {
+      "__type__": "cc.Node",
+      "_name": "mouth_0",
+      "_parent": {
+        "__id__": 22
+      },
       "_components": [
         {
           "__type__": "cc.Sprite",
@@ -21728,7 +21703,7 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "idle_0",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
         73,
@@ -21810,10 +21785,10 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_8",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         3,
-        475,
+        420,
         63,
         26
       ],
@@ -23269,9 +23244,9 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_7",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
-        101,
+        94,
         518,
         23,
         23
@@ -23459,7 +23434,7 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_5",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         82,
         171,
@@ -23597,7 +23572,7 @@
     "__type__": "cc.SpriteFrame",
     "content": {
       "name": "mouth_9",
-      "texture": "195f78cc1",
+      "texture": "1fff1ab00",
       "rect": [
         95,
         33,
