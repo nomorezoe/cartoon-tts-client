@@ -220,6 +220,7 @@ window.__require = function e(t, n, r) {
         idleMouthTimeout: -1,
         bodyAnim: BodyAnim,
         headAnim: cc.Animation,
+        initialMsgJSON: null,
         URL: "http://40.121.137.102"
       },
       start: function start() {
@@ -230,6 +231,7 @@ window.__require = function e(t, n, r) {
         -1 == window.location.href.indexOf("localhost") && -1 == window.location.href.indexOf("127.0.0.1") || (isLocalHost = true);
         console.log("isLocalHost", isLocalHost);
         this.onTextLenChange(this.editBox.string);
+        this.startFurwee();
       },
       handleConnect: function handleConnect() {
         console.log("connected", this.socket.id);
@@ -349,21 +351,33 @@ window.__require = function e(t, n, r) {
         var requestURL = this.URL + "/initial-message/";
         xhr.onreadystatechange = function() {
           if (xhr.readyState == XMLHttpRequest.DONE && 200 == xhr.status) {
-            var json = JSON.parse(xhr.responseText);
-            that.onTTSCompleted(json, function() {
-              that.addBallon(json.reply, true);
-              this.bodyAnim.playIntro();
-            });
-            that.historyObjects.push({
-              index: that.historyObjects.length,
-              reply: json.reply,
-              message: json.message
-            });
+            that.initialMsgJSON = JSON.parse(xhr.responseText);
+            if (!that.tryToStartFurweeIntro()) {
+              var remoteUrl = that.initialMsgJSON.audio_file_link;
+              cc.loader.load({
+                url: remoteUrl,
+                type: "wav"
+              });
+            }
           }
         };
         xhr.open("GET", requestURL, true);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
+      },
+      tryToStartFurweeIntro: function tryToStartFurweeIntro() {
+        if (this.blockerNode.active) return false;
+        if (!this.initialMsgJSON) return false;
+        this.onTTSCompleted(this.initialMsgJSON, function() {
+          this.addBallon(this.initialMsgJSON.reply, true);
+          this.bodyAnim.playIntro();
+        }.bind(this));
+        this.historyObjects.push({
+          index: this.historyObjects.length,
+          reply: this.initialMsgJSON.reply,
+          message: this.initialMsgJSON.message
+        });
+        return true;
       },
       onTTSCompleted: function onTTSCompleted(info) {
         var soundloadedHandler = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : null;
@@ -449,7 +463,7 @@ window.__require = function e(t, n, r) {
       startSound: function startSound() {
         this.blockerNode.active = false;
         this.music.initialize();
-        this.startFurwee();
+        this.tryToStartFurweeIntro();
       },
       clearMouth: function clearMouth() {
         for (var i = 0; i <= 21; i++) {
