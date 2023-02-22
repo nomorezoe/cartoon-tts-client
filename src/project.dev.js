@@ -83,7 +83,7 @@ window.__require = function e(t, n, r) {
         var isLocalHost = false;
         -1 == window.location.href.indexOf("localhost") && -1 == window.location.href.indexOf("127.0.0.1") || (isLocalHost = true);
         console.log("isLocalHost", isLocalHost);
-        this.urlAddress = isLocalHost ? "http://127.0.0.1:3000" : "http://13.115.222.147:3000";
+        this.urlAddress = isLocalHost ? "http://127.0.0.1:3000" : "http://54.250.243.177:3000";
         this.socket = new window.io(this.urlAddress, {
           transports: [ "websocket", "polling", "flashsocket" ]
         });
