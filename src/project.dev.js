@@ -423,7 +423,7 @@ window.__require = function e(t, n, r) {
         };
         var params = JSON.stringify({
           message: sendText,
-          hitory: this.historyObjects
+          history: this.historyObjects
         });
         xhr.open("POST", requestURL, true);
         xhr.setRequestHeader("Content-type", "application/json");
