@@ -20247,7 +20247,7 @@
             "__id__": 2
           },
           "_componentId": "aa6b4oHh3RETr68323Kl57q",
-          "handler": "sendHandler"
+          "handler": "didReturnHandler"
         }
       ],
       "_N$textLabel": {

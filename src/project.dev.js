@@ -381,7 +381,6 @@ window.__require = function e(t, n, r) {
       },
       onTTSCompleted: function onTTSCompleted(info) {
         var soundloadedHandler = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : null;
-        console.log(JSON.stringify(info.info));
         if (!info) return;
         this.audioInfo = info.lip_sync_animation;
         var remoteUrl = info.audio_file_link;
@@ -400,11 +399,18 @@ window.__require = function e(t, n, r) {
           }.bind(this));
         }.bind(this));
       },
+      didReturnHandler: function didReturnHandler() {
+        this.sendHandler();
+        setTimeout(function() {
+          this.editBox.focus();
+        }.bind(this), 0);
+      },
       sendHandler: function sendHandler() {
         var sendText = this.editBox.string;
         if (0 == sendText.trim().length) return;
         this.addBallon(sendText, false);
         this.editBox.string = "";
+        this.editBox.focus();
         this.onTextLenChange(this.editBox.string);
         var that = this;
         var xhr = new XMLHttpRequest();
@@ -428,6 +434,17 @@ window.__require = function e(t, n, r) {
         xhr.open("POST", requestURL, true);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(params);
+        var xhr2 = new XMLHttpRequest();
+        var requestURL2 = this.URL + "/emotion/";
+        xhr2.onreadystatechange = function() {
+          xhr2.readyState == XMLHttpRequest.DONE && 200 == xhr2.status && console.log(xhr2.responseText);
+        };
+        var params2 = JSON.stringify({
+          message: sendText
+        });
+        xhr2.open("POST", requestURL2, true);
+        xhr2.setRequestHeader("Content-type", "application/json");
+        xhr2.send(params2);
       },
       updateMouth: function updateMouth() {
         var id = this.audioInfo[this.audioOffset].viseme_id;
