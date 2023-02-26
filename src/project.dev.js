@@ -102,16 +102,18 @@ window.__require = function e(t, n, r) {
         infos: null,
         vx: 0,
         vy: 0,
-        ax: .1,
-        maxV: .3,
-        rotRangeX: 1,
+        ax: .5,
+        maxV: 1,
+        rotRangeX: 10,
         rotRangeY: 10,
         screenWidth: 0,
+        screenHeight: 0,
         designResolutionHeight: 0,
         designResolutionHeight_2: 0
       },
       onLoad: function onLoad() {
         this.screenWidth = cc.view.getDesignResolutionSize().height / cc.view.getCanvasSize().height * cc.view.getCanvasSize().width;
+        this.screenHeight = cc.view.getDesignResolutionSize().width / cc.view.getCanvasSize().width * cc.view.getCanvasSize().height;
         this.designResolutionHeight = cc.view.getDesignResolutionSize().height;
         this.designResolutionHeight_2 = cc.view.getDesignResolutionSize().height / 2;
         this.infos = [];
@@ -132,15 +134,17 @@ window.__require = function e(t, n, r) {
       onTouchMove: function onTouchMove(evt) {},
       onMouseMove: function onMouseMove(evt) {
         var targetY = (this.screenWidth / 2 - evt._x) / (this.screenWidth / 2) * this.rotRangeY;
-        var targetX = -Math.pow(1 - evt._y / this.designResolutionHeight, 3) * this.rotRangeX * 2;
+        var targetX = (this.screenHeight / 2 - evt._y) / (this.screenHeight / 2) * this.rotRangeX;
         var currentX = this.sceneNodes[0].eulerAngles.x;
         var currentY = this.sceneNodes[0].eulerAngles.y;
+        console.log("currentX", currentX, "currentY", currentY);
         var timeY = Math.abs(targetY - currentY) / this.rotRangeY;
         var timeX = Math.abs(targetX - currentX) / this.rotRangeX;
         for (var i = 0; i < this.sceneNodes.length; i++) {
           var rotate3DTo = cc.rotate3DTo(Math.max(timeX, timeY), cc.v3(targetX + this.infos[i].x, targetY + this.infos[i].y, 0));
+          console.log(targetX, targetY);
           this.sceneNodes[i].stopAllActions();
-          this.sceneNodes[i].runAction(rotate3DTo.easing(cc.easeOut(1)));
+          this.sceneNodes[i].runAction(rotate3DTo);
         }
       }
     });
