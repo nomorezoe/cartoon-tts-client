@@ -90,6 +90,137 @@ window.__require = function e(t, n, r) {
     });
     cc._RF.pop();
   }, {} ],
+  CamAdjust: [ function(require, module, exports) {
+    "use strict";
+    cc._RF.push(module, "5d400oTV05Ld4Jsmmrztiwt", "CamAdjust");
+    "use strict";
+    var CamAdjust = cc.Class({
+      extends: cc.Component,
+      properties: {
+        cameras: [ cc.Camera ],
+        isKeyA: false,
+        isKeyD: false,
+        isKeyW: false,
+        isKeyS: false,
+        isKeyO: false,
+        isKeyP: false,
+        isK: false,
+        isL: false,
+        isM: false,
+        isN: false
+      },
+      statics: {},
+      onLoad: function onLoad() {
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+      },
+      onDestroy: function onDestroy() {
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+      },
+      update: function update() {
+        if (this.isKeyA) for (var i = 0; i < this.cameras.length; i++) this.cameras[i].node.z += 1;
+        if (this.isKeyD) for (var _i = 0; _i < this.cameras.length; _i++) this.cameras[_i].node.z -= 1;
+        if (this.isKeyW) for (var _i2 = 0; _i2 < this.cameras.length; _i2++) this.cameras[_i2].node.y += 1;
+        if (this.isKeyS) for (var _i3 = 0; _i3 < this.cameras.length; _i3++) this.cameras[_i3].node.y -= 1;
+        if (this.isM) for (var _i4 = 0; _i4 < this.cameras.length; _i4++) this.cameras[_i4].node.x += 1;
+        if (this.isN) for (var _i5 = 0; _i5 < this.cameras.length; _i5++) this.cameras[_i5].node.x -= 1;
+        if (this.isKeyO) for (var _i6 = 0; _i6 < this.cameras.length; _i6++) this.cameras[_i6].node.rotationX += .1;
+        if (this.isKeyP) for (var _i7 = 0; _i7 < this.cameras.length; _i7++) this.cameras[_i7].node.rotationX -= .1;
+        if (this.isK) for (var _i8 = 0; _i8 < this.cameras.length; _i8++) this.cameras[_i8].fov += .1;
+        if (this.isL) for (var _i9 = 0; _i9 < this.cameras.length; _i9++) this.cameras[_i9].fov -= .1;
+      },
+      onKeyDown: function onKeyDown(event) {
+        switch (event.keyCode) {
+         case cc.macro.KEY.a:
+          this.isKeyA = true;
+          break;
+
+         case cc.macro.KEY.d:
+          this.isKeyD = true;
+          break;
+
+         case cc.macro.KEY.w:
+          this.isKeyW = true;
+          break;
+
+         case cc.macro.KEY.s:
+          this.isKeyS = true;
+          break;
+
+         case cc.macro.KEY.o:
+          this.isKeyO = true;
+          break;
+
+         case cc.macro.KEY.p:
+          this.isKeyP = true;
+          break;
+
+         case cc.macro.KEY.k:
+          this.isK = true;
+          break;
+
+         case cc.macro.KEY.l:
+          this.isL = true;
+          break;
+
+         case cc.macro.KEY.m:
+          this.isM = true;
+          break;
+
+         case cc.macro.KEY.n:
+          this.isN = true;
+        }
+      },
+      onKeyUp: function onKeyUp(event) {
+        switch (event.keyCode) {
+         case cc.macro.KEY.a:
+          this.isKeyA = false;
+          break;
+
+         case cc.macro.KEY.d:
+          this.isKeyD = false;
+          break;
+
+         case cc.macro.KEY.w:
+          this.isKeyW = false;
+          break;
+
+         case cc.macro.KEY.s:
+          this.isKeyS = false;
+          break;
+
+         case cc.macro.KEY.o:
+          this.isKeyO = false;
+          break;
+
+         case cc.macro.KEY.p:
+          this.isKeyP = false;
+          break;
+
+         case cc.macro.KEY.k:
+          this.isK = false;
+          break;
+
+         case cc.macro.KEY.l:
+          this.isL = false;
+          break;
+
+         case cc.macro.KEY.u:
+          console.log(this.cameras[0].node.position, this.cameras[0].node.rotationX, this.cameras[0].fov);
+          break;
+
+         case cc.macro.KEY.m:
+          this.isM = false;
+          break;
+
+         case cc.macro.KEY.n:
+          this.isN = false;
+        }
+      }
+    });
+    cc._RF.pop();
+  }, {} ],
   CamMove: [ function(require, module, exports) {
     "use strict";
     cc._RF.push(module, "2cd67RFoK5K1bWUfo3GU/9x", "CamMove");
@@ -225,6 +356,8 @@ window.__require = function e(t, n, r) {
         bodyAnim: BodyAnim,
         headAnim: cc.Animation,
         initialMsgJSON: null,
+        introCameras: [ cc.Camera ],
+        furweeIntialized: false,
         URL: "http://40.121.137.102"
       },
       start: function start() {
@@ -372,6 +505,8 @@ window.__require = function e(t, n, r) {
       tryToStartFurweeIntro: function tryToStartFurweeIntro() {
         if (this.blockerNode.active) return false;
         if (!this.initialMsgJSON) return false;
+        if (this.furweeIntialized) return false;
+        this.furweeIntialized = true;
         this.onTTSCompleted(this.initialMsgJSON, function() {
           this.addBallon(this.initialMsgJSON.reply, true);
           this.bodyAnim.playIntro();
@@ -481,10 +616,14 @@ window.__require = function e(t, n, r) {
         balloon.getComponent("Ballon").init(message, isFurwee);
         this.balloonNode.addChild(balloon);
       },
-      startSound: function startSound() {
+      blockClickHandler: function blockClickHandler() {
         this.blockerNode.active = false;
         this.music.initialize();
-        this.tryToStartFurweeIntro();
+        this.introCameraAnim();
+      },
+      introCameraAnim: function introCameraAnim() {
+        for (var i = 0; i < this.introCameras.length; i++) this.introCameras[i].getComponent(cc.Animation).play();
+        setTimeout(this.tryToStartFurweeIntro.bind(this), 2e3);
       },
       clearMouth: function clearMouth() {
         for (var i = 0; i <= 21; i++) {
@@ -582,5 +721,5 @@ window.__require = function e(t, n, r) {
     });
     cc._RF.pop();
   }, {} ]
-}, {}, [ "Ballon", "BodyAnim", "CamMove", "Eye", "Game", "MusicToggle", "Loading" ]);
+}, {}, [ "Ballon", "BodyAnim", "CamAdjust", "CamMove", "Eye", "Game", "MusicToggle", "Loading" ]);
 //# sourceMappingURL=project.dev.js.map

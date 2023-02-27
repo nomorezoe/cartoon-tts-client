@@ -4,7 +4,8 @@ window._CCSettings = {
         "default",
         "UI",
         "2dStage",
-        "3d"
+        "3d",
+        "3dFront"
     ],
     collisionMatrix: [
         [
@@ -20,6 +21,13 @@ window._CCSettings = {
             false
         ],
         [
+            false,
+            false,
+            false,
+            false
+        ],
+        [
+            false,
             false,
             false,
             false,
@@ -191,7 +199,7 @@ window._CCSettings = {
             "14TDKXr2NJ6LjvHPops74o",
             "3ae7efMv1CLq2ilvUY/tQi"
         ],
-        "094fdb51d": [
+        "09cc6834b": [
             "00pg6JGC5HoJ95ZLii9S7P",
             "005+N7dNRK9rrWUFF7DENn",
             "01FHNwkTxNsoiIYTyu+4fL",
@@ -346,6 +354,7 @@ window._CCSettings = {
             "40vr59GDdHC67JSq/jWQaV",
             "402p0MwT5F1a9Xg6OE/zlk",
             "41SDsr2JVDEpBHQKpitlK9",
+            "41fPSlwn1OMapS7UdZEV2e",
             "41u/2saqxFmrBtfQeH/1GR",
             "4162XUS1ZAuLcuiPhO12tx",
             "42Qg7NYelD3YNUz+QUTurD",
@@ -540,6 +549,7 @@ window._CCSettings = {
             "8cNMWEJIpH4JrbdA0U3wcx",
             "8cwoZXciVERYeLotvuSHHM",
             "8c7Ggk8ZpCCrSr0e4rtgUC",
+            "8dDNgl+nJJ0q26zMJetZOd",
             "8dHi/djjVOLIyzVXOj7mJK",
             "8dMgmT0c9D2qnlovG3GOFf",
             "8df0wSRkRGPqMzMOlViV01",
@@ -666,6 +676,7 @@ window._CCSettings = {
             "bbjxm7+z5EFKNGN5/zBBqb",
             "bcDMpY9q5FvZ6BjANnlDt7",
             "bcICNLwX9MqbyYF8hX/2Mu",
+            "bcaq57dvRPjI30OTq2s2vB",
             "bdWnPZ75NEb4ybddhqTYLq",
             "beJhpogKpPuJwPbxKx2RGV",
             "beN18nha9P3p445qAodF0E",
